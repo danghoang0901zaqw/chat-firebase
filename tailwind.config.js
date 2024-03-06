@@ -16,7 +16,7 @@ module.exports = {
             },
             colors: {
                 primary: '#fe2c55',
-                black: '#000',
+                black: '#050505',
                 white: '#fff',
                 gray: {
                     50: '#e4e6eb',
@@ -28,6 +28,7 @@ module.exports = {
                     600: '#65676b',
                     700: '#606770',
                     800: '#888',
+                    900: '#3a3b3c',
                 },
                 green: {
                     50: '#5ad539',
