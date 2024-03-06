@@ -1,16 +1,12 @@
-import Button from '@/components/Button'
+'use client';
+import ChatWindow from '@/views/home/ChatWindow';
+import Sidebar from '@/views/home/Sidebar';
 
 export default function Home() {
   return (
-    <div>
-       <Button outline>Hello</Button>
-        <Button primary>Hello</Button>
-        <Button text>Hello</Button>
-        <Button disabled>Hello</Button>
-        <Button large>Hello</Button>
-        <Button small>Hello</Button>
-        <Button href="https://www.youtube.com/">Hello</Button>
-        <Button to="/login">Hello</Button>
+    <div className='h-screen flex'>
+      <Sidebar />
+      <ChatWindow />
     </div>
-  )
+  );
 }

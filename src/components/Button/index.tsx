@@ -58,7 +58,7 @@ const Button = ({
         <Comp
             {...props}
             className={mergeClassNames(
-                'inline-flex items-center justify-center min-w-[100px] py-2 px-4 font-bold text-base cursor-pointer bg-white rounded border border-transparent select-none',
+                'inline-flex items-center justify-center min-w-[100px] py-2 px-4 font-bold text-base cursor-pointer bg-white rounded-lg border border-transparent select-none',
                 className,
                 {
                     'py-2 min-w-[88px]': small,
