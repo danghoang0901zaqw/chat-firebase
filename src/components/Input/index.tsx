@@ -5,6 +5,7 @@ type InputType = 'text' | 'password' | 'email';
 
 interface InputProps {
     type: InputType;
+    value: string;
     label?: string;
     disabled?: boolean;
     placeholder?: string;
@@ -15,10 +16,11 @@ interface InputProps {
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
     maxLength?: number;
-    onChange?: (value: string) => void;
+    onChange: (value: string) => void;
 }
 const Input = ({
     type = 'text',
+    value,
     label,
     placeholder,
     disabled,
@@ -26,25 +28,22 @@ const Input = ({
     isNumber,
     leftIcon,
     rightIcon,
-    maxLength = 1000,
+    maxLength,
     defaultValue,
     autoComplete,
     onChange,
     ...props
 }: InputProps) => {
-    const [value, setValue] = useState<string>('');
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         if (value.startsWith(' ')) return;
         if (isNumber) {
             const numberRegex = /^\d*(\.\d{0,})?$/;
             if (!numberRegex.test(value)) return;
-            setValue(value);
-            onChange && onChange(value);
+            onChange(value);
             return;
         }
-        setValue(value);
-        onChange && onChange(value);
+        onChange(value);
     };
     return (
         <>
