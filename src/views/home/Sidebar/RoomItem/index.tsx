@@ -3,7 +3,7 @@ import Image from 'next/image';
 const RoomItem = () => {
     return (
         <div className="cursor-pointer flex items-center justify-between px-4 py-2 rounded hover:bg-gray-200 transition-all ease-linear">
-            <div className="rounded-full h-[58px] w-[58px] border border-gray-50 overflow-hidden">
+            <div className="rounded-full h-[58px] w-[58px] border border-gray-200 overflow-hidden">
                 <Image
                     src="https://firebasestorage.googleapis.com/v0/b/chataap-34af1.appspot.com/o/images%2Frooms_avatar%2Fpe0dBPnY8yAkOwdiCUDU%2F1682303374833_92137_605f7dde-8665-4024-8f79-2beba3c73146_Screenshot%202023-04-24%20092935.png?alt=media&token=c9424a3e-eb8a-4ebd-8b46-288ea3815aca"
                     alt="item"
