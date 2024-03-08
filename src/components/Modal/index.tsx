@@ -20,11 +20,11 @@ const Modal = ({ visible = false, children, title, onCancel, onConfirm, textBtnC
                     'opacity-1 visible': visible,
                 },
             )}
-            onClick={onCancel}
         >
+            <div onClick={onCancel} className="fixed inset-0 z-50"></div>
             <div
                 className={mergeClassNames(
-                    'w-[96vw] md:w-[548px] flex flex-col fixed rounded-[14px] -bottom-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-black/0 shadow z-50 opacity-0 transition-all',
+                    'w-[96vw] md:w-[548px] z-[99] flex flex-col fixed rounded-[14px] -bottom-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-black/0 shadow opacity-0 transition-all',
                     {
                         'bottom-1/4 opacity-1': visible,
                     },
