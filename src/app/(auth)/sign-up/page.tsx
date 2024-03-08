@@ -1,6 +1,7 @@
 'use client';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Loading from '@/components/Loading';
 import { auth, db } from '@/firebase/config';
 import signUpSchema, { FormSignUpValues } from '@/validation/auth/signUp';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +27,7 @@ const SignUp = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const router=useRouter()
+    const router = useRouter();
 
     const handleSignUp = async (data: FormSignUpValues) => {
         try {
@@ -44,12 +45,17 @@ const SignUp = () => {
                     active: serverTimestamp(),
                 });
                 setLoading(false);
-                router.push('/login')
+                router.push('/login');
             } catch (error) {
                 setLoading(false);
             }
-        } catch (error) {
-            toast.error('Đăng ký tài khoản thất bại');
+        } catch (error: any) {
+            let msgError = 'Đăng ký tài khoản thất bại';
+            if (error.includes('(auth/email-already-in-use)')) {
+                msgError = 'Tài khoản này đã tồn tại';
+            }
+            toast.error(msgError);
+            setLoading(false);
         }
     };
 
@@ -155,7 +161,7 @@ const SignUp = () => {
                         Đăng nhập
                     </Button>
                     <Button className="w-full" primary disabled={loading}>
-                        {loading ? <Loading/>:'Đăng ký'}
+                        {loading ? <Loading /> : 'Đăng ký'}
                     </Button>
                 </div>
             </form>
