@@ -2,13 +2,13 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Loading from '@/components/Loading';
-import { auth, db } from '@/firebase/config';
+import { auth } from '@/firebase/config';
+import { addDocument } from '@/firebase/services';
 import signUpSchema, { FormSignUpValues } from '@/validation/auth/signUp';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -35,20 +35,15 @@ const SignUp = () => {
                 'https://firebasestorage.googleapis.com/v0/b/chatting-realtime-9c987.appspot.com/o/user.png?alt=media&token=404ef9d3-681e-492e-a582-bf826c32e338';
             setLoading(true);
             const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
-            try {
-                await addDoc(collection(db, 'users'), {
-                    displayName: user.displayName,
-                    email: user.email,
-                    photoURL: defaultAvatar,
-                    uid: user.uid,
-                    providerId: user.providerId,
-                    active: serverTimestamp(),
-                });
-                setLoading(false);
-                router.push('/login');
-            } catch (error) {
-                setLoading(false);
-            }
+            await addDocument('users', {
+                displayName: data.username,
+                email: user.email,
+                photoURL: defaultAvatar,
+                uid: user.uid,
+                providerId: user.providerId,
+            });
+            setLoading(false);
+            router.push('/login');
         } catch (error: any) {
             let msgError = 'Đăng ký tài khoản thất bại';
             if (error.includes('(auth/email-already-in-use)')) {

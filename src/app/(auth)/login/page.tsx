@@ -2,13 +2,13 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Loading from '@/components/Loading';
-import { auth, db, facebookProvider, googleProvider } from '@/firebase/config';
+import { auth, facebookProvider, googleProvider } from '@/firebase/config';
+import { addDocument } from '@/firebase/services';
 import loginSchema, { FormLoginValues } from '@/validation/auth/login';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -29,7 +29,7 @@ const Login = () => {
     const handleLogin = async (data: FormLoginValues) => {
         try {
             setLoading(true);
-           await signInWithEmailAndPassword(auth, data.username, data.password);
+            await signInWithEmailAndPassword(auth, data.username, data.password);
         } catch (error: any) {
             toast.error('Tài khoản hoặc mật khẩu không chính xác');
         } finally {
@@ -42,18 +42,13 @@ const Login = () => {
             const { user, _tokenResponse }: any = await signInWithPopup(auth, facebookProvider);
             const isNewUser = _tokenResponse?.isNewUser;
             if (isNewUser) {
-                try {
-                    await addDoc(collection(db, 'users'), {
-                        displayName: user.displayName,
-                        email: user.email,
-                        photoURL: user.photoURL,
-                        uid: user.uid,
-                        providerId: _tokenResponse.providerId,
-                        active: serverTimestamp(),
-                    });
-                    
-                } catch (error) {
-                }
+                await addDocument('users', {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    uid: user.uid,
+                    providerId: _tokenResponse.providerId,
+                });
             }
         } catch (error) {
             toast.error('Đăng nhập thất bại');
@@ -65,17 +60,13 @@ const Login = () => {
             const { user, _tokenResponse }: any = await signInWithPopup(auth, googleProvider);
             const isNewUser = _tokenResponse?.isNewUser;
             if (isNewUser) {
-                try {
-                    const docRef = await addDoc(collection(db, 'users'), {
-                        displayName: user.displayName,
-                        email: user.email,
-                        photoURL: user.photoURL,
-                        uid: user.uid,
-                        providerId: _tokenResponse.providerId,
-                        active: serverTimestamp(),
-                    });
-                } catch (error) {
-                }
+                await addDocument('users', {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    uid: user.uid,
+                    providerId: _tokenResponse.providerId,
+                });
             }
         } catch (error) {
             toast.error('Đăng nhập thất bại');
