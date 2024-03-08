@@ -32,7 +32,7 @@ const SignUp = () => {
     const handleSignUp = async (data: FormSignUpValues) => {
         try {
             const defaultAvatar =
-                'https://firebasestorage.googleapis.com/v0/b/testting-8959c.appspot.com/o/user.png?alt=media&token=89159008-9028-4ed7-9ae3-b44fb7b4e97d';
+                'https://firebasestorage.googleapis.com/v0/b/chatting-realtime-9c987.appspot.com/o/user.png?alt=media&token=404ef9d3-681e-492e-a582-bf826c32e338';
             setLoading(true);
             const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
             try {
