@@ -50,7 +50,7 @@ const Input = ({
             {label && <p className="text-base font-medium mb-1">{label}</p>}
             <div className="flex items-center pr-3 bg-gray-100 border border-gray-400 rounded-lg overflow-hidden">
                 {leftIcon && (
-                    <span className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-50 transition-all">
+                    <span className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all">
                         {leftIcon}
                     </span>
                 )}
@@ -64,7 +64,7 @@ const Input = ({
                     {...props}
                 />
                 {rightIcon && (
-                    <span className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-50 transition-all">
+                    <span className="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center hover:bg-gray-200 transition-all">
                         {rightIcon}
                     </span>
                 )}

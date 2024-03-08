@@ -1,55 +1,57 @@
 'use client';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import { auth, db } from '@/firebase/config';
+import signUpSchema, { FormSignUpValues } from '@/validation/auth/signUp';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-interface FormSignUpValues {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-}
-const SignUp = () => {
-    const validationSchema: yup.ObjectSchema<FormSignUpValues> = yup.object().shape({
-        username: yup.string().required('Vui lòng nhập email'),
-        email: yup
-            .string()
-            .required('Vui lòng nhập email')
-            .test('regex-email', 'Email không đúng định dạng', (value: string) => {
-                const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-                return regexEmail.test(value);
-            }),
-        password: yup
-            .string()
-            .required('Vui lòng nhập mật khẩu')
-            .min(8, 'Mật khẩu phải từ 8 kí tự')
-            .test('password', 'Mật khẩu phải gồm chữ hoa, số và kí tự đặc biệt', (value: string) => {
-                const regexPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
-                return regexPassword.test(value);
-            }),
-        confirmPassword: yup
-            .string()
-            .required('Vui lòng xác nhận nhập mật khẩu')
-            .oneOf([yup.ref('password')], 'Mật khẩu không trùng khớp'),
-    });
+import { toast } from 'react-toastify';
 
+const SignUp = () => {
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm<FormSignUpValues>({
-        resolver: yupResolver(validationSchema),
+        resolver: yupResolver(signUpSchema),
         defaultValues: { username: '', email: '', password: '', confirmPassword: '' },
         mode: 'onChange',
     });
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const router=useRouter()
 
-    const handleSignUp = (data: FormSignUpValues) => {};
+    const handleSignUp = async (data: FormSignUpValues) => {
+        try {
+            const defaultAvatar =
+                'https://firebasestorage.googleapis.com/v0/b/testting-8959c.appspot.com/o/user.png?alt=media&token=89159008-9028-4ed7-9ae3-b44fb7b4e97d';
+            setLoading(true);
+            const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            try {
+                await addDoc(collection(db, 'users'), {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: defaultAvatar,
+                    uid: user.uid,
+                    providerId: user.providerId,
+                    active: serverTimestamp(),
+                });
+                setLoading(false);
+                router.push('/login')
+            } catch (error) {
+                setLoading(false);
+            }
+        } catch (error) {
+            toast.error('Đăng ký tài khoản thất bại');
+        }
+    };
 
     return (
         <div className="h-full w-full flex flex-col gap-2 p-3 pt-10 md:p-10">
@@ -152,8 +154,8 @@ const SignUp = () => {
                     <Button className="w-full" to="/login" outline>
                         Đăng nhập
                     </Button>
-                    <Button className="w-full" primary>
-                        Đăng ký
+                    <Button className="w-full" primary disabled={loading}>
+                        {loading ? <Loading/>:'Đăng ký'}
                     </Button>
                 </div>
             </form>

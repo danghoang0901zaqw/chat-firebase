@@ -1,45 +1,87 @@
 'use client';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Loading from '@/components/Loading';
+import { auth, db, facebookProvider, googleProvider } from '@/firebase/config';
+import loginSchema, { FormLoginValues } from '@/validation/auth/login';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-
-interface FormLoginValues {
-    username: string;
-    password: string;
-}
+import { toast } from 'react-toastify';
 
 const Login = () => {
-    const validationSchema: yup.ObjectSchema<FormLoginValues> = yup.object().shape({
-        username: yup
-            .string()
-            .required('Vui lòng điền tên đăng nhập')
-            .test('regex-email', 'Email không đúng định dạng', (value: string) => {
-                const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-                return regexEmail.test(value);
-            }),
-        password: yup.string().required('Vui lòng nhập mật khẩu'),
-    });
-
     const {
         control,
         handleSubmit,
         formState: { errors },
     } = useForm<FormLoginValues>({
-        resolver: yupResolver(validationSchema),
+        resolver: yupResolver(loginSchema),
         defaultValues: { username: '', password: '' },
         mode: 'onChange',
     });
     const [showPassword, setShowPassword] = useState<boolean>(false);
-
-    const handleLogin = (data: FormLoginValues) => {
-        console.log(data);
+    const [loading, setLoading] = useState<boolean>(false);
+    const handleLogin = async (data: FormLoginValues) => {
+        try {
+            setLoading(true);
+           await signInWithEmailAndPassword(auth, data.username, data.password);
+        } catch (error: any) {
+            toast.error('Tài khoản hoặc mật khẩu không chính xác');
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleLoginWithFacebook = async () => {
+        try {
+            const { user, _tokenResponse }: any = await signInWithPopup(auth, facebookProvider);
+            const isNewUser = _tokenResponse?.isNewUser;
+            if (isNewUser) {
+                try {
+                    await addDoc(collection(db, 'users'), {
+                        displayName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL,
+                        uid: user.uid,
+                        providerId: _tokenResponse.providerId,
+                        active: serverTimestamp(),
+                    });
+                    
+                } catch (error) {
+                }
+            }
+        } catch (error) {
+            toast.error('Đăng nhập thất bại');
+        }
+    };
+
+    const handleLoginWithGoogle = async () => {
+        try {
+            const { user, _tokenResponse }: any = await signInWithPopup(auth, googleProvider);
+            const isNewUser = _tokenResponse?.isNewUser;
+            if (isNewUser) {
+                try {
+                    const docRef = await addDoc(collection(db, 'users'), {
+                        displayName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL,
+                        uid: user.uid,
+                        providerId: _tokenResponse.providerId,
+                        active: serverTimestamp(),
+                    });
+                } catch (error) {
+                }
+            }
+        } catch (error) {
+            toast.error('Đăng nhập thất bại');
+        }
+    };
+
     return (
         <div className="h-full w-full flex flex-col gap-2 p-3 pt-10 md:p-10">
             <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-3">
@@ -98,8 +140,8 @@ const Login = () => {
                     <Button className="w-full" to="/sign-up" outline>
                         Đăng ký
                     </Button>
-                    <Button onClick={handleSubmit(handleLogin)} className="w-full" primary>
-                        Đăng nhập
+                    <Button primary disabled={loading} onClick={handleSubmit(handleLogin)} className="w-full">
+                        {loading ? <Loading /> : 'Đăng nhập'}
                     </Button>
                 </div>
             </form>
@@ -109,7 +151,10 @@ const Login = () => {
                 <hr className="w-full bg-gray-200" />
             </div>
             <div className="w-full flex items-center justify-center gap-3">
-                <div className="w-12 h-12 rounded-full border border-primary flex items-center justify-center p-1 cursor-pointer hover:bg-gray-100 transition-all">
+                <div
+                    onClick={handleLoginWithFacebook}
+                    className="w-12 h-12 rounded-full border border-primary flex items-center justify-center p-1 cursor-pointer hover:bg-gray-100 transition-all"
+                >
                     <Image
                         src="/images/brands/facebook.png"
                         alt="facebook"
@@ -118,7 +163,10 @@ const Login = () => {
                         className="object-cover"
                     />
                 </div>
-                <div className="w-12 h-12 rounded-full border border-primary flex items-center justify-center p-1 cursor-pointer hover:bg-gray-100 transition-all">
+                <div
+                    onClick={handleLoginWithGoogle}
+                    className="w-12 h-12 rounded-full border border-primary flex items-center justify-center p-1 cursor-pointer hover:bg-gray-100 transition-all"
+                >
                     <Image
                         src="/images/brands/google.png"
                         alt="google"
