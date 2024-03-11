@@ -10,12 +10,13 @@ const useQueryFirestore = (collectionName: string, condition: Condition) => {
 
   useEffect(() => {
     const collectionRef = collection(db, collectionName);
-    if (condition) {
-      if (!condition.operator || !condition.value) return;
-      query(collectionRef, where(condition.fieldName, condition.operator, condition.value)), orderBy('createAt');
-    }
+    let q
+    if (!condition) return
+    if (!condition.operator || !condition.value) return;
+    q = query(collectionRef, where(condition.fieldName, condition.operator, condition.value)), orderBy('createAt');
+
     const unsubcribe = onSnapshot(
-      collectionRef,
+      q,
       (snapshot) => {
         const documents: any = snapshot.docs.map((doc) => {
           let data = doc.data();
