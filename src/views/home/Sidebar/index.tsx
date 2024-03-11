@@ -1,18 +1,38 @@
 'use client';
-import { useAuth } from '@/hooks/usAuth';
+import CreateRoom from '@/components/Modal/ContentsModal/CreateRoom';
+import UserOptions from '@/components/Modal/ContentsModal/UserOptions';
+import { useAuth } from '@/hooks/useAuth';
+import useQueryFirestore from '@/hooks/useQueryFirestore';
+import { Condition, Room } from '@/types/chat';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
+import { useMemo, useState } from 'react';
 import RoomItem from './RoomItem';
 
 const Sidebar = () => {
     const user = useAuth();
+    const [isOpenUserOptions, setIsOpenUserOptions] = useState<boolean>(false);
+    const [isOpenCreateRoom, setIsOpenCreateRoom] = useState<boolean>(false);
+
+    const roomCondition: Condition = useMemo(() => {
+        return {
+            fieldName: 'members',
+            operator: '==',
+            value: user.uid,
+        };
+    }, [user.uid]);
+
+    const listRoom = useQueryFirestore('rooms', roomCondition);
 
     return (
         <>
             <div className="w-[360px] h-full flex flex-col border-r border-gray-200">
                 <div className="flex items-center justify-between h-[50px] px-4 border-b border-gray-200">
-                    <div className="cursor-pointer h-9 w-9 rounded-full border border-gray-900 overflow-hidden">
+                    <div
+                        onClick={() => setIsOpenUserOptions(!isOpenUserOptions)}
+                        className="cursor-pointer h-9 w-9 rounded-full border border-gray-900 overflow-hidden"
+                    >
                         <Image
                             src={user.photoURL}
                             alt={user.displayName}
@@ -22,16 +42,22 @@ const Sidebar = () => {
                         />
                     </div>
                     <p className="font-semibold select-none">Chat</p>
-                    <span className="cursor-pointer w-9 h-9 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-100 transition-all">
+                    <span
+                        onClick={() => setIsOpenCreateRoom(true)}
+                        className="cursor-pointer w-9 h-9 rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-100 transition-all"
+                    >
                         <FontAwesomeIcon icon={faPenToSquare} size="lg" />
                     </span>
                 </div>
                 <div className="flex-1 overflow-y-auto p-1">
-                    {Array.from({ length: 20 }).map((_, index) => (
-                        <RoomItem key={index} />
+                    {listRoom.map((room: Room, index) => (
+                        <RoomItem key={index} room={room}/>
                     ))}
                 </div>
             </div>
+
+            <UserOptions visible={isOpenUserOptions} onCancel={() => setIsOpenUserOptions(false)} />
+            <CreateRoom visible={isOpenCreateRoom} onCancel={() => setIsOpenCreateRoom(false)} />
         </>
     );
 };
