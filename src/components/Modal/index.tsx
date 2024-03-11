@@ -24,13 +24,13 @@ const Modal = ({ visible = false, children, title, onCancel, onConfirm, textBtnC
             <div onClick={onCancel} className="fixed inset-0 z-50"></div>
             <div
                 className={mergeClassNames(
-                    'w-[96vw] md:w-[548px] z-[99] flex flex-col fixed rounded-[14px] -bottom-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-black/0 shadow opacity-0 transition-all',
+                    'w-[96vw] md:w-[548px] z-[99] flex flex-col items-center justify-center rounded-[14px] -translate-y-24 bg-white border border-black/0 shadow opacity-0 invisible transition-all',
                     {
-                        'bottom-1/4 opacity-1': visible,
+                        '-translate-y-0 opacity-1 visible': visible,
                     },
                 )}
             >
-                <div className="relative">
+                <div className="w-full relative">
                     {title && <p className="font-medium text-center pt-5">{title}</p>}
                     <i
                         onClick={onCancel}
@@ -39,7 +39,7 @@ const Modal = ({ visible = false, children, title, onCancel, onConfirm, textBtnC
                         <FontAwesomeIcon icon={faXmark} />
                     </i>
                 </div>
-                <div className="p-3">
+                <div className="w-full p-3">
                     {children}
                     {onConfirm && (
                         <Button primary onClick={onConfirm} className="w-full text-center">
