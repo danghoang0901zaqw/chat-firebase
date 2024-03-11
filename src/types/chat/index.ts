@@ -18,3 +18,11 @@ export interface Room {
     roomName: string;
     photoURL: string;
 }
+export type MessageType = {
+    createdAt: Timestamp;
+    displayName: string;
+    contentMessage: string;
+    roomId: string;
+    uid: string;
+    photoURL: string;
+}

@@ -1,11 +1,40 @@
+import { MessageType } from '@/types/chat';
 import mergeClassNames from '@/utils/mergeClassNames';
 import Image from 'next/image';
 
-const Message = ({ itsMe }: { itsMe: boolean }) => {
+interface MessageProps {
+    message: MessageType;
+    itsMe: boolean;
+}
+
+const TextContent = ({ text, itsMe }: { text: string; itsMe: boolean }) => {
+    let Comp: any = 'p';
+    const linkPrefixes = ['http://', 'https://', 'www.'];
+    const props: any = {};
+    if (linkPrefixes.some((prefix) => text.includes(prefix))) {
+        Comp = 'a';
+        props.href = text;
+        props.target = '_blank';
+    }
+
+    return (
+        <Comp
+            className={mergeClassNames('break-words', {
+                'text-white': itsMe,
+                underline: Comp === 'a',
+            })}
+            {...props}
+        >
+            {text}
+        </Comp>
+    );
+};
+const Message = ({ message, itsMe }: MessageProps) => {
     return (
         <div
             className={mergeClassNames('flex items-end justify-start gap-2', {
                 'justify-end gap-0': itsMe,
+                'ml-2': !itsMe,
             })}
         >
             {!itsMe && (
@@ -21,16 +50,10 @@ const Message = ({ itsMe }: { itsMe: boolean }) => {
             )}
             <div
                 className={mergeClassNames('bg-gray-200 max-w-[300px] rounded-3xl px-4 py-2', {
-                    'bg-primary': itsMe,
+                    'bg-primary mr-2': itsMe,
                 })}
             >
-                <p
-                    className={mergeClassNames('break-words', {
-                        'text-white': itsMe,
-                    })}
-                >
-                    https://kizsd-my.sharepoint.com/:f:/g/personal/longvulinhhoang_edu_thptbinhmai_edu_vn/Eq8Hc5VP53JOmRe0oEs1AecBuSlNFypgZlQFv7lp4yzSGA?email=danghoang0901zaqwe%40gmail.com&e=7LsZV3
-                </p>
+                <TextContent text={message.contentMessage} itsMe={itsMe} />
             </div>
         </div>
     );

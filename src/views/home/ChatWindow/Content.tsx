@@ -32,10 +32,11 @@ const ContentChatWindow = ({ roomActive }: ContentChatWindowProps) => {
     }, [roomId]);
 
     const handleSentMessage = async () => {
+        if (!value) return;
         await addDocument(
             'messages',
             {
-                message: value,
+                contentMessage: value,
                 uid: user.uid,
                 photoURL: user.photoURL,
                 roomId,
