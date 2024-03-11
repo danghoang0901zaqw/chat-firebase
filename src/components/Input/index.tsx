@@ -1,5 +1,5 @@
 import mergeClassNames from '@/utils/mergeClassNames';
-import React, { useState } from 'react';
+import React, { KeyboardEvent, forwardRef } from 'react';
 
 type InputType = 'text' | 'password' | 'email';
 
@@ -17,6 +17,7 @@ interface InputProps {
     rightIcon?: React.ReactNode;
     maxLength?: number;
     onChange: (value: string) => void;
+    onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 const Input = ({
     type = 'text',
@@ -32,6 +33,7 @@ const Input = ({
     defaultValue,
     autoComplete,
     onChange,
+    onEnter,
     ...props
 }: InputProps) => {
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +47,7 @@ const Input = ({
         }
         onChange(value);
     };
+
     return (
         <>
             {label && <p className="text-base font-medium mb-1">{label}</p>}
@@ -55,12 +58,14 @@ const Input = ({
                     </span>
                 )}
                 <input
+                    // ref={ref}
                     value={value}
                     type={type}
                     disabled={disabled}
                     placeholder={placeholder}
-                    className={mergeClassNames('outline-none w-full bg-transparent p-2 text-base', className)}
+                    className={mergeClassNames('outline-none w-full rounded-lg bg-transparent p-2 text-base', className)}
                     onChange={handleChangeValue}
+                    onKeyPress={(e) => onEnter && onEnter(e)}
                     {...props}
                 />
                 {rightIcon && (
@@ -73,4 +78,4 @@ const Input = ({
     );
 };
 
-export default Input;
+export default (Input);

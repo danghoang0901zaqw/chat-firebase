@@ -1,6 +1,6 @@
 import Modal from '@/components/Modal';
 import { auth } from '@/firebase/config';
-import { useAuth } from '@/hooks/usAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { faPencil, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { signOut } from 'firebase/auth';
