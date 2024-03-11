@@ -4,6 +4,7 @@ import Input from '@/components/Input';
 import Loading from '@/components/Loading';
 import { auth } from '@/firebase/config';
 import { addDocument } from '@/firebase/services';
+import { defaultAvatar } from '@/utils/constaint';
 import signUpSchema, { FormSignUpValues } from '@/validation/auth/signUp';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,8 +32,7 @@ const SignUp = () => {
 
     const handleSignUp = async (data: FormSignUpValues) => {
         try {
-            const defaultAvatar =
-                'https://firebasestorage.googleapis.com/v0/b/chatting-realtime-9c987.appspot.com/o/user.png?alt=media&token=404ef9d3-681e-492e-a582-bf826c32e338';
+           
             setLoading(true);
             const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
             await addDocument('users', {
