@@ -1,29 +1,20 @@
 'use client';
 import CreateRoom from '@/components/Modal/ContentsModal/CreateRoom';
 import UserOptions from '@/components/Modal/ContentsModal/UserOptions';
+import useApp from '@/hooks/useApp';
 import { useAuth } from '@/hooks/useAuth';
-import useQueryFirestore from '@/hooks/useQueryFirestore';
-import { Condition, Room } from '@/types/chat';
+import { Room } from '@/types/chat';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import RoomItem from './RoomItem';
 
 const Sidebar = () => {
-    const user = useAuth();
     const [isOpenUserOptions, setIsOpenUserOptions] = useState<boolean>(false);
     const [isOpenCreateRoom, setIsOpenCreateRoom] = useState<boolean>(false);
-
-    const roomCondition: Condition = useMemo(() => {
-        return {
-            fieldName: 'members',
-            operator: '==',
-            value: user.uid,
-        };
-    }, [user.uid]);
-
-    const listRoom = useQueryFirestore('rooms', roomCondition);
+    const { listRoom } = useApp()
+    const user = useAuth();
 
     return (
         <>
@@ -51,7 +42,7 @@ const Sidebar = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-1">
                     {listRoom.map((room: Room, index) => (
-                        <RoomItem key={index} room={room}/>
+                        <RoomItem key={index} room={room} />
                     ))}
                 </div>
             </div>

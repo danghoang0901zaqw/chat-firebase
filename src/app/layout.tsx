@@ -4,7 +4,8 @@ import { Inter } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import './globals.css';
 
-import AuthGuard from '@/auth/AuthGuard';
+import AppProvider from '@/context/app';
+import AuthGuard from '@/context/auth/AuthGuard';
 import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,20 +21,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <html lang="en">
                 <body className={inter.className}>
                     <AuthGuard>
-                        {children}
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={2000}
-                            limit={3}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="light"
-                        />
+                        <AppProvider>
+                            {children}
+                            <ToastContainer
+                                position="top-right"
+                                autoClose={2000}
+                                limit={3}
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                                pauseOnHover
+                                theme="light"
+                            />
+                        </AppProvider>
                     </AuthGuard>
                 </body>
             </html>
