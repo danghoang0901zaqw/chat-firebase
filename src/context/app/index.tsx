@@ -17,7 +17,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const roomCondition: Condition = useMemo(() => {
         return {
             fieldName: 'members',
-            operator: '==',
+            operator: 'array-contains',
             value: user.uid,
         };
     }, [user.uid]);
