@@ -7,7 +7,7 @@ export interface ChatState {
 export interface Condition {
     fieldName: string;
     operator: WhereFilterOp;
-    value: string;
+    value: any;
 }
 
 export interface Room {
