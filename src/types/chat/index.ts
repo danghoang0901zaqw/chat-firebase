@@ -2,6 +2,7 @@ import { Timestamp, WhereFilterOp } from 'firebase/firestore';
 
 export interface ChatState {
     roomId: string | undefined;
+    isOpenRoomOptions:boolean
 }
 
 export interface Condition {

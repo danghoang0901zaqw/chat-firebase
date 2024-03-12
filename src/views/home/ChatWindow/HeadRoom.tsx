@@ -1,13 +1,23 @@
+import { openRoomOptions } from '@/redux/chat/chatSlice';
+import { RootState } from '@/redux/store';
 import { Room } from '@/types/chat';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface HeadRoomProps {
     roomActive: Room;
 }
 
 const HeadRoom = ({ roomActive }: HeadRoomProps) => {
+    const dispatch = useDispatch();
+    const { isOpenRoomOptions } = useSelector((state: RootState) => state.chat);
+
+    const handleOpenRoomOptions = () => {
+        dispatch(openRoomOptions(!isOpenRoomOptions));
+    };
+
     return (
         <div className="w-full flex items-center justify-between h-14 px-3 py-2">
             <div className="flex items-center gap-3">
@@ -25,7 +35,10 @@ const HeadRoom = ({ roomActive }: HeadRoomProps) => {
                     <p className="text-xs text-gray-600">Hoạt động 4 giờ trước</p>
                 </div>
             </div>
-            <i className="cursor-pointer w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-all">
+            <i
+                onClick={handleOpenRoomOptions}
+                className="cursor-pointer w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-all"
+            >
                 <FontAwesomeIcon icon={faEllipsis} className="text-primary" />
             </i>
         </div>
