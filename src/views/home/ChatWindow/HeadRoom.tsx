@@ -1,6 +1,7 @@
 import { openRoomOptions } from '@/redux/chat/chatSlice';
 import { RootState } from '@/redux/store';
 import { Room } from '@/types/chat';
+import { formatDistanceTime } from '@/utils/formatDistanceTime';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
@@ -32,7 +33,7 @@ const HeadRoom = ({ roomActive }: HeadRoomProps) => {
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <p className="font-bold truncate max-w-[300px]">{roomActive.roomName}</p>
-                    <p className="text-xs text-gray-600">Hoạt động 4 giờ trước</p>
+                    <p className="text-xs text-gray-600">Hoạt động {formatDistanceTime(roomActive.createdAt.seconds)}</p>
                 </div>
             </div>
             <i

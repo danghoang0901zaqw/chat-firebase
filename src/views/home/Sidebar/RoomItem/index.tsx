@@ -1,6 +1,7 @@
 import { selectedRoomId } from '@/redux/chat/chatSlice';
 import { RootState } from '@/redux/store';
 import { Room } from '@/types/chat';
+import { formatDistanceTime } from '@/utils/formatDistanceTime';
 import mergeClassNames from '@/utils/mergeClassNames';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +15,6 @@ const RoomItem = ({ room }: RoomItemProps) => {
     const handleSelectedRoom = () => {
         dispatch(selectedRoomId(room.id));
     };
-
     return (
         <div
             onClick={handleSelectedRoom}
@@ -41,7 +41,9 @@ const RoomItem = ({ room }: RoomItemProps) => {
                         <span className="select-none text-gray-600 font-light truncate max-w-[140px]">
                             {room.description}
                         </span>
-                        <span className="font-normal whitespace-nowrap"> · {room?.createdAt?.seconds}</span>
+                        <span className="font-normal whitespace-nowrap">
+                            · {formatDistanceTime(room?.createdAt?.seconds)}
+                        </span>
                     </div>
                 </div>
             </div>
