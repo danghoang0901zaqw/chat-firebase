@@ -29,7 +29,7 @@ const CreateRoom = ({ visible, onCancel }: CreateRoomProps) => {
         if (users.length > 1 && valueDebounced !== '') {
             let usersSearch = users.filter((member: User) => {
                 let memberDisplayName = member.displayName.toLowerCase();
-                return memberDisplayName.includes(valueDebounced) && member.uid !== user.uid;
+                return memberDisplayName.includes(valueDebounced) && member.uid !== user?.uid;
             });
 
             // Sort ascending by ASCII
@@ -46,7 +46,7 @@ const CreateRoom = ({ visible, onCancel }: CreateRoomProps) => {
         } else {
             setSearchUsers([]);
         }
-    }, [valueDebounced, users, user.uid]);
+    }, [valueDebounced, users, user?.uid]);
 
     const handleSelectUser = (e: ChangeEvent<HTMLInputElement>) => {
         const isChecked = e.target.checked;
@@ -65,7 +65,7 @@ const CreateRoom = ({ visible, onCancel }: CreateRoomProps) => {
             {
                 roomName: 'Cuộc trò chuyện mới',
                 description: 'Tạo cuộc trò chuyện thành công',
-                members: [user.uid, ...listMemberUid],
+                members: [user?.uid, ...listMemberUid],
                 photoURL: defaultAvatar,
             },
             'Tạo cuộc trò chuyện thất bại',

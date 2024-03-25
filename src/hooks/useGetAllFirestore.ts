@@ -9,7 +9,7 @@ function useGetAllFirestore(collectionName: string, callback?: Function, callbac
   const user = useAuth();
 
   useEffect(() => {
-    if (user.uid) {
+    if (user?.uid) {
       const unsubscribe = onSnapshot(
         collection(db, collectionName),
         (snapshot) => {
@@ -37,7 +37,7 @@ function useGetAllFirestore(collectionName: string, callback?: Function, callbac
         unsubscribe();
       };
     }
-  }, [collectionName, user.uid, callback, callbackError]);
+  }, [collectionName, user?.uid, callback, callbackError]);
 
   return documents;
 }

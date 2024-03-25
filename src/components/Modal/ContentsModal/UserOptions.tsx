@@ -33,14 +33,14 @@ const UserOptions = ({ visible, onCancel }: UserOptionsProps) => {
                     <div className="flex items-center justify-between gap-3 p-2 cursor-pointer w-full rounded-lg hover:bg-gray-100 transition-all duration-300">
                         <div className="flex items-center gap-3">
                             <Image
-                                src={user.photoURL}
-                                alt={user.displayName}
+                                src={user?.photoURL ?? ''}
+                                alt={user?.displayName ?? ''}
                                 width={64}
                                 height={64}
                                 className="w-16 h-16 rounded-full object-cover border border-gray-200"
                             />
                             <div>
-                                <p className="text-sm font-semibold mb-1">{user.displayName}</p>
+                                <p className="text-sm font-semibold mb-1">{user?.displayName ?? ''}</p>
                                 <p className="text-xs font-normal text-gray-700">Sửa tên và ảnh đại diện</p>
                             </div>
                         </div>

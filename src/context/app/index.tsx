@@ -29,9 +29,9 @@ const AppProvider = ({ children }: AppProviderProps) => {
         return {
             fieldName: 'members',
             operator: 'array-contains',
-            value: user.uid,
+            value: user?.uid,
         };
-    }, [user.uid]);
+    }, [user?.uid]);
 
     const listRoom = useQueryFirestore('rooms', roomCondition);
 

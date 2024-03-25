@@ -25,8 +25,8 @@ const Sidebar = () => {
                         className="cursor-pointer h-9 w-9 rounded-full border border-gray-900 overflow-hidden"
                     >
                         <Image
-                            src={user.photoURL}
-                            alt={user.displayName}
+                            src={user?.photoURL ?? ''}
+                            alt={user?.displayName ?? ''}
                             width={36}
                             height={36}
                             className="h-full w-full object-cover"

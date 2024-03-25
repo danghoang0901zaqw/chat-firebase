@@ -9,10 +9,10 @@ interface AuthGuardProps {
     children: React.ReactNode;
 }
 
-export const AuthContext = createContext({} as User);
+export const AuthContext = createContext<User | null>(null);
 
 const AuthGuard = ({ children }: AuthGuardProps) => {
-    const [user, setUser] = useState<User | {}>({} as User);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
     useEffect(() => {
@@ -20,17 +20,17 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
             if (user) {
                 const { displayName, email, uid, photoURL } = user;
                 setUser({
-                    displayName,
-                    email,
+                    displayName: displayName ?? '',
+                    email: email ?? '',
                     uid,
-                    photoURL,
+                    photoURL: photoURL ?? '/images/user.png',
                 });
                 setIsLoading(false);
                 router.push('/');
                 return;
             }
         });
-        setUser({});
+        setUser(null);
         router.push('/login');
         setIsLoading(false);
         return () => unsubscibed();
@@ -38,7 +38,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
     if (isLoading) return <Loading />;
 
-    return <AuthContext.Provider value={user as User}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 };
 
 export default AuthGuard;
