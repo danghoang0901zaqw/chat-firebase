@@ -5,4 +5,5 @@ export interface App {
     listRoom: Room[];
     roomActive: Room | undefined
     users: User[]
+    membersInARoom: User[]
 }

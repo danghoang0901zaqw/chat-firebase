@@ -30,5 +30,5 @@
     background: var(--thumb-hover-color);
 }
 body {
-    overflow-y: hidden;
+    overflow: hidden;
 }
