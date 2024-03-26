@@ -33,7 +33,7 @@ const HeadRoom = ({ roomActive }: HeadRoomProps) => {
                 </div>
                 <div className="flex flex-col items-start justify-center">
                     <p className="font-bold truncate max-w-[300px]">{roomActive.roomName}</p>
-                    <p className="text-xs text-gray-600">Hoạt động {formatDistanceTime(roomActive.createdAt.seconds)}</p>
+                    <p className="text-xs text-gray-600">Hoạt động {formatDistanceTime(roomActive.createdAt?.seconds)}</p>
                 </div>
             </div>
             <i
