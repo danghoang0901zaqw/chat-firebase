@@ -9,12 +9,15 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 const Login = () => {
+    const router = useRouter()
     const {
         control,
         handleSubmit,
@@ -29,7 +32,9 @@ const Login = () => {
     const handleLogin = async (data: FormLoginValues) => {
         try {
             setLoading(true);
-            await signInWithEmailAndPassword(auth, data.username, data.password);
+            const res: any = await signInWithEmailAndPassword(auth, data.username, data.password);
+            Cookies.set('token', res.user.accessToken)
+            router.push('/')
         } catch (error: any) {
             toast.error('Tài khoản hoặc mật khẩu không chính xác');
         } finally {
@@ -40,6 +45,8 @@ const Login = () => {
     const handleLoginWithFacebook = async () => {
         try {
             const { user, _tokenResponse }: any = await signInWithPopup(auth, facebookProvider);
+            Cookies.set('token', user.accessToken)
+            router.push('/')
             const isNewUser = _tokenResponse?.isNewUser;
             if (isNewUser) {
                 await addDocument('users', {
@@ -59,6 +66,8 @@ const Login = () => {
         try {
             const { user, _tokenResponse }: any = await signInWithPopup(auth, googleProvider);
             const isNewUser = _tokenResponse?.isNewUser;
+            Cookies.set('token', user.accessToken)
+            router.push('/')
             if (isNewUser) {
                 await addDocument('users', {
                     displayName: user.displayName,

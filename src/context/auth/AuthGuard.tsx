@@ -1,5 +1,4 @@
 'use client';
-import Loading from '@/components/Loading';
 import { auth } from '@/firebase/config';
 import { User } from '@/types/auth';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -13,7 +12,6 @@ export const AuthContext = createContext<User | null>(null);
 
 const AuthGuard = ({ children }: AuthGuardProps) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
     useEffect(() => {
         const unsubscibed = onAuthStateChanged(auth, (user) => {
@@ -25,18 +23,12 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
                     uid,
                     photoURL: photoURL ?? '/images/user.png',
                 });
-                setIsLoading(false);
-                router.push('/');
                 return;
             }
         });
         setUser(null);
-        router.push('/login');
-        setIsLoading(false);
         return () => unsubscibed();
     }, [router]);
-
-    if (isLoading) return <Loading />;
 
     return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 };
