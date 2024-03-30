@@ -1,9 +1,9 @@
 import { db } from '@/firebase/config';
 import { Condition } from '@/types/chat';
-import { collection, limit, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-
-const useQueryFirestore = (collectionName: string, condition: Condition, limited: number = 20) => {
+type SortType = 'asc' | 'desc'
+const useQueryFirestore = (collectionName: string, condition: Condition, sort: SortType = 'desc') => {
     const [document, setDocument] = useState([]);
 
     useEffect(() => {
@@ -14,8 +14,7 @@ const useQueryFirestore = (collectionName: string, condition: Condition, limited
         q = query(
             collectionRef,
             where(condition.fieldName, condition.operator, condition.value),
-            orderBy('createdAt', 'desc'),
-            limit(limited),
+            orderBy('createdAt', sort),
         );
         const unsubcribe = onSnapshot(
             q,
@@ -36,7 +35,7 @@ const useQueryFirestore = (collectionName: string, condition: Condition, limited
         );
 
         return () => unsubcribe();
-    }, [collectionName, condition, limited]);
+    }, [collectionName, condition, sort]);
 
     return document;
 };
