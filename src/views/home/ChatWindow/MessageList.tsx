@@ -5,7 +5,7 @@ import { Condition, MessageType } from '@/types/chat';
 import { forwardRef, useMemo } from 'react';
 import Message from './Message';
 
-const MessageList = () => {
+const MessageList = (props:any, ref: any) => {
     const { roomActive } = useApp();
     const user = useAuth();
     const msgCondition: Condition = useMemo(() => {
@@ -19,9 +19,9 @@ const MessageList = () => {
     const messages = useQueryFirestore('messages', msgCondition);
 
     return (
-        <div className="h-full w-full flex flex-col justify-end gap-3">
+        <div ref={ref} className="flex-1 flex flex-col-reverse  gap-3 overflow-y-auto">
             {messages.map((message: MessageType, index: number) => {
-                const itsMe = user.uid === message.uid;
+                const itsMe = user?.uid === message.uid;
                 return <Message key={index} itsMe={itsMe} message={message} />;
             })}
         </div>

@@ -4,6 +4,7 @@ import useApp from '@/hooks/useApp';
 import { useAuth } from '@/hooks/useAuth';
 import { RootState } from '@/redux/store';
 import { User } from '@/types/auth';
+import { formatDistanceTime } from '@/utils/formatDistanceTime';
 import mergeClassNames from '@/utils/mergeClassNames';
 import { faBell, faEllipsis, faImage, faPencil, faSearch, faSignature, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,7 +38,7 @@ const RoomOptions = () => {
                     />
                     <div>
                         <p className="text-center font-semibold max-w-[240px] truncate">{roomActive?.roomName}</p>
-                        <p className="text-center text-xs select-none text-gray-600 font-light">Hoạt động 8 giờ trước</p>
+                        <p className="text-center text-xs select-none text-gray-600 font-light">Hoạt động {roomActive && formatDistanceTime(roomActive?.createdAt.seconds)}</p>
                     </div>
                     <div className="flex justify-center items-center">
                         <div className="flex flex-col items-center justify-center gap-2 px-4">
@@ -110,7 +111,7 @@ const RoomOptions = () => {
                         </div>
                     </Collapse>
 
-                    <Collapse title="File phương tiện">
+                    {/* <Collapse title="File phương tiện">
                         <ul className="px-2">
                             <li className="flex items-center gap-2 p-2 hover:bg-gray-300 transition-all duration-200 cursor-pointer rounded-lg">
                                 <span className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
@@ -131,7 +132,7 @@ const RoomOptions = () => {
                                 <p className="font-medium text-sm">Chỉnh sửa biệt danh</p>
                             </li>
                         </ul>
-                    </Collapse>
+                    </Collapse> */}
 
                     <Collapse title="Quyền riêng tư và hỗ trợ">
                         <ul className="px-2">

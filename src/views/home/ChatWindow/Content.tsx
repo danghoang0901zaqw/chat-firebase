@@ -21,6 +21,8 @@ const ContentChatWindow = ({ roomActive }: ContentChatWindowProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleScrollToBottom = () => {
+        console.log(contentMessageRef.current);
+        console.log(contentMessageRef.current.scrollHeight);
         contentMessageRef.current.scrollTo({
             top: contentMessageRef.current.scrollHeight,
             left: 0,
@@ -37,13 +39,14 @@ const ContentChatWindow = ({ roomActive }: ContentChatWindowProps) => {
             'messages',
             {
                 contentMessage: value,
-                uid: user.uid,
-                photoURL: user.photoURL,
+                uid: user?.uid,
+                photoURL: user?.photoURL,
                 roomId,
-                displayName: user.displayName
+                displayName: user?.displayName
             },
             'Gửi tin nhắn thất bại',
         );
+        handleScrollToBottom()
         setValue('');
         inputRef.current?.focus();
     };
@@ -58,9 +61,7 @@ const ContentChatWindow = ({ roomActive }: ContentChatWindowProps) => {
     return (
         <div className="w-full flex flex-col">
             <HeadRoom roomActive={roomActive} />
-            <div ref={contentMessageRef} className="flex-1 overflow-y-auto py-2 w-full">
-                <MessageList />
-            </div>
+            <MessageList ref={contentMessageRef} />
             <div className="h-14 flex items-center p-2 gap-2">
                 <div className="flex-1 h-full w-full rounded-3xl bg-gray-100 overflow-hidden">
                     <input
