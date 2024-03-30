@@ -1,4 +1,5 @@
 import Collapse from '@/components/Collapse';
+import LeaveRoom from '@/components/Modal/ContentsModal/LeaveRoom';
 import RenameRoom from '@/components/Modal/ContentsModal/RenameRoom';
 import useApp from '@/hooks/useApp';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,7 +16,8 @@ import { useSelector } from 'react-redux';
 const RoomOptions = () => {
     const { isOpenRoomOptions } = useSelector((state: RootState) => state.chat);
     const { roomActive, membersInARoom } = useApp();
-    const [isOpenRenameRoom, setIsOpenRenameRoom] = useState<boolean>(false);
+    const [openRenameRoom, setOpenRenameRoom] = useState<boolean>(false);
+    const [openLeaveRoom, setOpenLeaveRoom] = useState<boolean>(false);
     const user = useAuth();
 
     return (
@@ -59,7 +61,7 @@ const RoomOptions = () => {
                 <div className="flex-1 overflow-y-auto py-4">
                     <Collapse title="Tuỳ chỉnh đoạn chat">
                         <ul className="px-2">
-                            <li onClick={() => setIsOpenRenameRoom(true)} className="flex items-center gap-2 p-2 hover:bg-gray-300 transition-all duration-200 cursor-pointer rounded-lg">
+                            <li onClick={() => setOpenRenameRoom(true)} className="flex items-center gap-2 p-2 hover:bg-gray-300 transition-all duration-200 cursor-pointer rounded-lg">
                                 <span className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
                                     <FontAwesomeIcon icon={faPencil} />
                                 </span>
@@ -136,7 +138,7 @@ const RoomOptions = () => {
 
                     <Collapse title="Quyền riêng tư và hỗ trợ">
                         <ul className="px-2">
-                            <li className="flex items-center gap-2 p-2 hover:bg-gray-300 transition-all duration-200 cursor-pointer rounded-lg">
+                            <li onClick={() => setOpenLeaveRoom(true)} className="flex items-center gap-2 p-2 hover:bg-gray-300 transition-all duration-200 cursor-pointer rounded-lg">
                                 <span className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center">
                                     <FontAwesomeIcon icon={faSignOut} />
                                 </span>
@@ -146,7 +148,8 @@ const RoomOptions = () => {
                     </Collapse>
                 </div>
             </div>
-            <RenameRoom visible={isOpenRenameRoom} onCancel={() => setIsOpenRenameRoom(false)} />
+            <RenameRoom visible={openRenameRoom} onCancel={() => setOpenRenameRoom(false)} />
+            <LeaveRoom visible={openLeaveRoom} onCancel={() => setOpenLeaveRoom(false)} />
         </>
     );
 };

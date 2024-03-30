@@ -38,7 +38,7 @@ const RoomItem = ({ room }: RoomItemProps) => {
                 <div className="flex-1 flex flex-col items-start justify-center">
                     <p className="select-none font-bold truncate max-w-[200px]">{room.roomName}</p>
                     <div className="w-full flex items-center justify-between text-xs">
-                        <span className="select-none text-gray-600 font-light truncate max-w-[140px]">
+                        <span className="select-none text-gray-600 font-light truncate max-w-[100px]">
                             {room.description}
                         </span>
                         <span className="font-normal whitespace-nowrap">

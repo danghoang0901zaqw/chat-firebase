@@ -36,7 +36,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const listRoom = useQueryFirestore('rooms', roomCondition);
 
     const roomActive: any =
-        listRoom.length === 0 ? undefined : listRoom.find((room: Room) => room.id === roomId) || listRoom[0];
+        listRoom.length === 0 ? undefined : listRoom.find((room: Room) => room.id === roomId);
 
     const users = useGetAllFirestore('users');
 

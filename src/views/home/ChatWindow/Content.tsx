@@ -21,8 +21,6 @@ const ContentChatWindow = ({ roomActive }: ContentChatWindowProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleScrollToBottom = () => {
-        console.log(contentMessageRef.current);
-        console.log(contentMessageRef.current.scrollHeight);
         contentMessageRef.current.scrollTo({
             top: contentMessageRef.current.scrollHeight,
             left: 0,
